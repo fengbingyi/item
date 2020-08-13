@@ -12,13 +12,12 @@ OBJS += applib.o
 
 all:$(OBJS)
 	$(CC)   $^ -o $(TARGET)
-	#$(CC) server_test.c -o server 
-	$(CC)  server.c -lsqlite3  -o server 
+	$(CC) server_test.c -o server 
 
 %.o:%.c
 	$(CC) $(CFLAGS) $@ $< 
 
 clean:
-	rm *.o $(TARGET) *.db server
+	rm *.o $(TARGET) *.db
 
 

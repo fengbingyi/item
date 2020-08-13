@@ -776,9 +776,26 @@ int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 	char ** result;
 	int nrow,ncloumn;
 	msg_t sendmsg;
-	sprintf(sql, "select * from info where usr = '%s';", msg->usr);
-	printf("%s\n", sql);
+	if(!strcmp(msg->pri,USER))
+	{
 
+		printf("你是普通用户\n");
+		sprintf(sql, "select * from info where usr = '%s';", msg->usr);
+		printf("%s\n",sql);
+	}else if(!strcmp(msg->pri, MANAGER))
+	{
+		printf("你是管理员\n");
+		sprintf(sql, "select * from info;", msg->usr);
+		printf("%s\n",sql);
+	
+	}
+	else{
+		sendmsg.status=NO;
+		printf("没有发送查询权限，拒绝查询\n");
+		send(acceptfd, &sendmsg, sizeof(msg_t), 0);
+		printf("查询成功msg发送成功！\n");
+
+	}
 	//db句柄
 	//sql：数据库操作语句 
 	//resultp:用来指向sql语句执行的结果
@@ -791,42 +808,59 @@ int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 		printf("%s\n", errmsg);
 		sendmsg.status=NO;
 		printf("查询失败");
+		send(acceptfd, &sendmsg, sizeof(msg_t), 0);
+		printf("查询成功msg发送成功！\n");
 	}
 	if(nrow < 1)
 	{
 		sendmsg.status=NO;
 		printf("没有记录\n");
-	}else{
+		send(acceptfd, &sendmsg, sizeof(msg_t), 0);
+		printf("查询成功msg发送成功！\n");
+	}else{	
 
-		int i=0;
-		for(i=0;i<(ncloumn);i++)
+		//打印表头
+			int i=0;
+			for(i=0;i<(ncloumn);i++)
+			{
+				printf("%-10s",result[i]);
+			}
+			puts("");
+
+		//打印数据 并一条一条发送
+		while(nrow)
 		{
-			printf("%-10s",result[i]);
+			puts("");
+		
+			for(i=ncloumn;i<(2*ncloumn);i++)
+			{
+				printf("%-10s",result[i]);
+			}
+			puts("");
+			i=0;
+			sendmsg.number = atoi(result[ncloumn+(i++)]);
+			strcpy(sendmsg.usr,result[ncloumn+(i++)]);
+			strcpy(sendmsg.password,result[ncloumn+(i++)]);
+			strcpy(sendmsg.pri,result[ncloumn+(i++)]);
+			strcpy(sendmsg.name,result[ncloumn+(i++)]);
+			sendmsg.age = atoi(result[ncloumn+(i++)]);
+			strcpy(sendmsg.sex,result[ncloumn+(i++)]);
+			sendmsg.salary = atoi(result[ncloumn+(i++)]);
+			strcpy(sendmsg.dept,result[ncloumn+(i++)]);
+			
+			sendmsg.inq_cnt = nrow--; 
+			
+
+			// 所有的记录查询发送完毕之后，给客户端发出一个结束信息
+			sendmsg.status  =  OK;
+			send(acceptfd, &sendmsg, sizeof(msg_t), 0);
+			printf("查询成功msg发送成功！\n");
+
+
+
 		}
-		puts("");
-		for(i=ncloumn;i<(2*ncloumn);i++)
-		{
-			printf("%-10s",result[i]);
+
 		}
-		puts("");
-		i=0;
-		sendmsg.number = atoi(result[ncloumn+(i++)]);
-		strcpy(sendmsg.usr,result[ncloumn+(i++)]);
-		strcpy(sendmsg.password,result[ncloumn+(i++)]);
-		strcpy(sendmsg.pri,result[ncloumn+(i++)]);
-		strcpy(sendmsg.name,result[ncloumn+(i++)]);
-		sendmsg.age = atoi(result[ncloumn+(i++)]);
-		strcpy(sendmsg.sex,result[ncloumn+(i++)]);
-		sendmsg.salary = atoi(result[ncloumn+(i++)]);
-		strcpy(sendmsg.dept,result[ncloumn+(i++)]);
-
-	}
-
-	// 所有的记录查询发送完毕之后，给客户端发出一个结束信息
-	sendmsg.status  =  OK;
-	send(acceptfd, &sendmsg, sizeof(msg_t), 0);
-	printf("查询成功msg发送成功！\n");
-
 	return 0;
 }
 

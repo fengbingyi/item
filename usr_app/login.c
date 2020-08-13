@@ -24,8 +24,8 @@ extern msg_t msg;/*从主函数文件中获得变量值*/
  ****************************************/
 int login_manager(int socketfd)
 {
-	char usr_buf[10] = {}; 
-	char pw_buf[10] = {};
+	char usr_buf[20] = {}; 
+	char pw_buf[20] = {};
 	msg_t rev_msg;
 	int ret = -1;	
 	/*fill login manager command */
@@ -66,8 +66,8 @@ int login_manager(int socketfd)
  ****************************************/
 int login_user(int socketfd)
 {
-	char usr_buf[10] = {}; /*用户名缓存*/
-	char pw_buf[10] = {};  /*密码缓存*/
+	char usr_buf[20] = {}; /*用户名缓存*/
+	char pw_buf[20] = {};  /*密码缓存*/
 	msg_t rev_msg;         /*从服务器收到的信息*/
 	int ret = -1;	
 	msg.cmd = LOG_USR ;
@@ -77,10 +77,10 @@ int login_user(int socketfd)
 	printf("请输入用户密码：");
 	scanf("%s",pw_buf);
 	getchar();
-	bzero(msg.usr,10);
-	bzero(msg.password,10);
-	strncpy(msg.usr,usr_buf,10);
-	strncpy(msg.password,pw_buf,10);
+	bzero(msg.usr,20);
+	bzero(msg.password,20);
+	strncpy(msg.usr,usr_buf,20);
+	strncpy(msg.password,pw_buf,20);
 	client_send(socketfd,&msg,sizeof(msg));
 	client_receive(socketfd,&rev_msg,sizeof(rev_msg));
 
@@ -89,8 +89,6 @@ int login_user(int socketfd)
 		return OK;
 	}
 	return NO;
-
-
 }
 
 /****************************************
@@ -101,8 +99,8 @@ int login_user(int socketfd)
  ****************************************/
 void login(int socketfd)
 {
-	char usr_buf[10] = {};
-	char pw_buf[10] = {};
+	char usr_buf[20] = {};
+	char pw_buf[20] = {};
 	msg_t rev_msg;
 	int ret = -1;
 	int choose     = 0 ;   /*用户输入选择*/

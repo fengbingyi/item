@@ -12,7 +12,7 @@ OBJS += applib.o
 
 all:$(OBJS)
 	$(CC)   $^ -o $(TARGET)
-	$(CC) server_test.c -o t_server 
+	$(CC) server_test.c -o server 
 
 %.o:%.c
 	$(CC) $(CFLAGS) $@ $< 

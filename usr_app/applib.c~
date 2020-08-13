@@ -91,22 +91,28 @@ void delect_user(int socketfd)
 *Name       : inquire_information
 *Description: 查询信息
 *args       : socketfd:套接字文件描述符
-*return     : 无
+*             msg_inq:要查询的消息结构体
+*return     : msg消息结构体
 ****************************************/
-void inquire_information(int socketfd) 
+msg_t inquire_information(int socketfd) 
 {
 	msg_t rev_msg;
 	msg.cmd = INQUIRE_INFO;
+	printf("1\n");
 	client_send(socketfd,&msg,sizeof(msg));
+	printf("2\n");
 	client_receive(socketfd,&rev_msg,sizeof(rev_msg));
-	printf("1.姓名：%s\n", msg.name    );
-	printf("2.年龄：%d\n", msg.age     );
-	printf("3.性别：%s\n", msg.sex     );
-	printf("4.密码：%s\n", msg.password);
-	printf("5.工号：%d\n", msg.number  );
-	printf("6.薪水：%d\n", msg.salary  );
-	printf("7.部门：%s\n", msg.dept    );
-}      
+	printf("3\n");
+	printf("1.姓名：%s\n", rev_msg.name    );
+	printf("2.年龄：%d\n", rev_msg.age     );
+	printf("3.性别：%s\n", rev_msg.sex     );
+	printf("4.密码：%s\n", rev_msg.password);
+	printf("5.工号：%d\n", rev_msg.number  );
+	printf("6.薪水：%d\n", rev_msg.salary  );
+	printf("7.部门：%s\n", rev_msg.dept    );
+	printf("4\n");
+	return rev_msg;
+}    
 
 /****************************************
 *Name       : modify_information
@@ -131,7 +137,7 @@ void modify_information(int socketfd)
 	}
 
 	/*获得查询用户的资料信息*/
-	inquire_information(socketfd);
+	msg_mod = inquire_information(socketfd);
 	/*进入修改循环*/
 	while(1){
 		do{
@@ -143,19 +149,19 @@ void modify_information(int socketfd)
 		if(choose == 1)
 		{
 			printf("请输入要修改的姓名>");
-			scanf("%s",msg.name);
+			scanf("%s",msg_mod.name);
 			getchar();
 		}
 		if(choose == 2)
 		{
 			printf("请输入要修改的年龄>");
-			scanf("%d",&msg.age);
+			scanf("%d",&msg_mod.age);
 			getchar();
 		}
 		if(choose == 3)
 		{
 			printf("请输入要修改的性别>");
-			scanf("%s",msg.sex);      /*暂时没加参数检测*/
+			scanf("%s",msg_mod.sex);      /*暂时没加参数检测*/
 			getchar();
 		}
 
@@ -163,7 +169,7 @@ void modify_information(int socketfd)
 		{
 			if(msg.pri == MANAGER){
 			printf("请输入要修改的密码>");
-			scanf("%s",msg.password); /*暂时没添加参数检测*/
+			scanf("%s",msg_mod.password); /*暂时没添加参数检测*/
 			getchar();
 			}else{
 				printf("本项修改权限不足\n");
@@ -174,7 +180,7 @@ void modify_information(int socketfd)
 		{
 			if(msg.pri == MANAGER){
 			printf("请输入要修改的工号>");
-			scanf("%d",&msg.number);
+			scanf("%d",&msg_mod.number);
 			getchar();
 			}else{
 				printf("本项修改权限不足\n");
@@ -185,7 +191,7 @@ void modify_information(int socketfd)
 		{
 			if(msg.pri == MANAGER){
 			printf("请输入要修改的薪水>");
-			scanf("%d",&msg.salary);
+			scanf("%d",&msg_mod.salary);
 			getchar();
 			}else{
 				printf("本项修改权限不足\n");
@@ -197,7 +203,7 @@ void modify_information(int socketfd)
 		{
 			if(msg.pri == MANAGER){
 				printf("请输入要修改的部门>");
-				scanf("%s",msg.dept);
+				scanf("%s",msg_mod.dept);
 				getchar();
 			}else{
 				printf("本项修改权限不足\n");

@@ -10,7 +10,7 @@
 #include"menu.h"
 #include"applib.h"
 #include"msg.h"
-
+extern msg_t msg;
 /***************************************
  *Name       : manager_function
  *Description: 管理员功能页面后台逻辑
@@ -36,12 +36,12 @@ void manager_function(int socketfd)
 		/*执行选择功能*/
 		switch(choose)
 		{
-		case 1:  add_user(socketfd)               ;break;
-		case 2:  delect_user(socketfd)            ;break;
-//		case 3:  modify_information(socketfd)     ;break;
-//		case 4:  inquire_information(socketfd,msg);break;
-		case 5:  inquire_history(socketfd)        ;break;
-		default:                                   break;
+		case 1:  add_user(socketfd)                ;break;
+		case 2:  delect_user(socketfd)             ;break;
+		case 3:  modify_information(socketfd)      ;break;
+		case 4:  inquire_information(socketfd) ;break;
+		case 5:  inquire_history(socketfd)         ;break;
+		default:                                    break;
 		}
 
 		/*退出*/

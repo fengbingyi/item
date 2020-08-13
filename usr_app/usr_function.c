@@ -32,11 +32,11 @@ void user_function(int socketfd)
 			scanf("%d",&choose);
 		}while(!(choose > 0)&&(choose <= menu_maxno));
 		switch(choose){
-		case 1:  inquire_information(socketfd);break;
-		case 2:  renew_password(socketfd)     ;break;
-		case 3:  modify_information(socketfd) ;break;
-		case 4:  inquire_history(socketfd)    ;break;
-		default:                               break;
+		case 1:  inquire_information(socketfd) ;break;
+		case 2:  renew_password(socketfd)          ;break;
+		case 3:  modify_information(socketfd)      ;break;
+		case 4:  inquire_history(socketfd,msg)     ;break;
+		default:                                    break;
 		}
 
 		if(choose == 5)break;

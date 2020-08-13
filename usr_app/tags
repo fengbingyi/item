@@ -1,0 +1,96 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ADD_USR	msg.h	25;"	d
+ALL_INFO	msg.h	41;"	d
+BACKLOG	server_test.c	26;"	d	file:
+CC	Makefile	/^CC := gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS := -c -o$/;"	m
+DELECT_USR	msg.h	26;"	d
+DEPT1	msg.h	36;"	d
+DEPT2	msg.h	37;"	d
+DEPT3	msg.h	38;"	d
+DEPT4	msg.h	39;"	d
+FIR_TEN_INFO	msg.h	42;"	d
+INQUIRE_HISTORY	msg.h	24;"	d
+INQUIRE_INFO	msg.h	21;"	d
+LOG_MANAGER	msg.h	19;"	d
+LOG_USR	msg.h	20;"	d
+LST_FIFTY_HIS	msg.h	44;"	d
+LST_TEN_INFO	msg.h	43;"	d
+MAN	msg.h	33;"	d
+MANAGER	msg.h	29;"	d
+NO	msg.h	48;"	d
+OK	msg.h	47;"	d
+QUIT	client.c	24;"	d	file:
+QUIT	server_test.c	24;"	d	file:
+REGISTER_MANAGER	msg.h	17;"	d
+REGISTER_USR	msg.h	18;"	d
+SEL_INFO	msg.h	45;"	d
+SERV_IP_ADDR	client.c	23;"	d	file:
+SERV_IP_ADDR	server_test.c	23;"	d	file:
+SERV_PORT	client.c	22;"	d	file:
+SERV_PORT	server_test.c	22;"	d	file:
+TARGET	Makefile	/^TARGET ?= app$/;"	m
+USER	msg.h	30;"	d
+VERIFY_INFO	msg.h	23;"	d
+VERIFY_PASSWORD	msg.h	22;"	d
+WONMAN	msg.h	34;"	d
+__APPLIB_H__	applib.h	10;"	d
+__CLIENT_H__	client.h	2;"	d
+__LOGIN_H__	login.h	10;"	d
+__MANAGER_FUNCTION_H__	manager_function.h	10;"	d
+__MENU_H__	menu.h	10;"	d
+__MSG_H__	msg.h	10;"	d
+__REG_H__	reg.h	10;"	d
+__USR_FUNCTION_H__	usr_function.h	10;"	d
+abc	add.c	/^int abc;$/;"	v
+abcd	add.c	/^int abcd;$/;"	v
+adc	add.c	/^int adc;$/;"	v
+add_user	applib.c	/^void add_user(int socketfd)$/;"	f
+age	msg.h	/^	int  age;           \/\/年龄$/;"	m	struct:mymsg
+client_exit	client.c	/^void client_exit(int fd)$/;"	f
+client_init	client.c	/^int client_init()$/;"	f
+client_receive	client.c	/^int client_receive(int sockfd, void *buf, size_t len)$/;"	f
+client_send	client.c	/^int client_send(int sockfd, const void *buf, size_t len)$/;"	f
+cmd	msg.h	/^	int  cmd;           \/\/命令$/;"	m	struct:mymsg
+delect_user	applib.c	/^void delect_user(int socketfd)$/;"	f
+dept	msg.h	/^	char dept[20];      \/\/部门$/;"	m	struct:mymsg
+inq_cnt	msg.h	/^	int  inq_cnt;       \/\/查询个数$/;"	m	struct:mymsg
+inq_mode	msg.h	/^	int  inq_mode;      \/\/查询模式$/;"	m	struct:mymsg
+inquire_history	applib.c	/^void inquire_history(int socketfd)$/;"	f
+inquire_information	applib.c	/^msg_t inquire_information(int socketfd, msg_t msg_inq) $/;"	f
+login	login.c	/^void login(int socketfd)$/;"	f
+login_manager	login.c	/^int login_manager(int socketfd)$/;"	f
+login_user	login.c	/^int login_user(int socketfd)$/;"	f
+main	server_test.c	/^int main(int argc, char *argv[])$/;"	f
+main	usr_app.c	/^int main(int argc, const char *argv[])$/;"	f
+manager_function	manager_function.c	/^void manager_function(int socketfd)$/;"	f
+menu_choose	menu.c	/^void  menu_choose()$/;"	f
+menu_login	menu.c	/^int menu_login()$/;"	f
+menu_manager_function	menu.c	/^int menu_manager_function()$/;"	f
+menu_modify	menu.c	/^int  menu_modify()$/;"	f
+menu_register	menu.c	/^int menu_register()$/;"	f
+menu_user_function	menu.c	/^int menu_user_function()$/;"	f
+menu_wellcome	menu.c	/^int menu_wellcome()$/;"	f
+modify_information	applib.c	/^void modify_information(int socketfd)$/;"	f
+msg	server_test.c	/^msg_t msg = {$/;"	v
+msg	usr_app.c	/^msg_t msg = {$/;"	v
+msg_t	msg.h	/^}msg_t;$/;"	t	typeref:struct:mymsg
+mymsg	msg.h	/^typedef struct mymsg{$/;"	s
+name	msg.h	/^    char name[20];      \/\/姓名$/;"	m	struct:mymsg
+number	msg.h	/^	int  number;        \/\/工号$/;"	m	struct:mymsg
+password	msg.h	/^	char password[20];  \/\/密码$/;"	m	struct:mymsg
+pri	msg.h	/^	char pri[10];           \/\/权限$/;"	m	struct:mymsg
+reg	reg.c	/^void reg(int socketfd)$/;"	f
+reg_manager	reg.c	/^int reg_manager(int sockfd)$/;"	f
+reg_usr	reg.c	/^int reg_usr(int sockfd)$/;"	f
+renew_password	applib.c	/^void renew_password(int socketfd)$/;"	f
+salary	msg.h	/^	int  salary;        \/\/薪水$/;"	m	struct:mymsg
+sex	msg.h	/^	char sex[10];           \/\/性别（"M"\/"W"）$/;"	m	struct:mymsg
+status	msg.h	/^	int  status;        \/\/返回$/;"	m	struct:mymsg
+user_function	usr_function.c	/^void user_function(int socketfd)$/;"	f
+usr	msg.h	/^	char usr[20];       \/\/用户名$/;"	m	struct:mymsg

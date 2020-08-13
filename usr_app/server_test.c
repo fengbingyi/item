@@ -123,6 +123,8 @@ int main(int argc, char *argv[])
 		}
 		if(!ret)break;
 		
+		printf("usr = %s\n",       msg.usr     );
+		printf("pri = %s\n",       msg.pri     );
 		printf("1.name:%s\n",    msg.name    );
 		printf("2.age:%d\n",     msg.age     );
 		printf("3.sex:%s\n",     msg.sex     );
@@ -130,6 +132,7 @@ int main(int argc, char *argv[])
 		printf("5.number:%d\n",  msg.number  );
 		printf("6.salary:%d\n",  msg.salary  );
 		printf("7.dept:%s\n",    msg.dept    );
+		printf("8.status = %d\n",    msg.status  );
 
 		printf("%d\n",msg.cmd);
 		
@@ -138,7 +141,7 @@ int main(int argc, char *argv[])
 		}else{
 			msg.status = NO;
 		}
-		key = ~key;
+		key = !key;
         send(newfd,&msg,sizeof(msg),0);
 		
 	}

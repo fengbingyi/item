@@ -20,7 +20,7 @@
 #include <sys/socket.h>
 
 #define  SERV_PORT    "6666"
-#define  SERV_IP_ADDR "192.168.5.106"
+#define  SERV_IP_ADDR "192.168.5.104"
 #define  QUIT         "quit"
 
 /****************************************

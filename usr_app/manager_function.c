@@ -9,8 +9,9 @@
 #include<stdio.h>
 #include"menu.h"
 #include"applib.h"
+#include"msg.h"
 
-/****************************************
+/***************************************
  *Name       : manager_function
  *Description: 管理员功能页面后台逻辑
  *args       :
@@ -23,7 +24,8 @@ void manager_function(int socketfd)
 	int menu_maxno = 0 ;   /*菜单数量变量定义*/
 
 	/*得到用户选择值*/
-	while(1){
+	while(1)
+	{
 		do{
 			menu_maxno = menu_manager_function();
 			menu_choose();
@@ -32,16 +34,17 @@ void manager_function(int socketfd)
 		}while(!(choose > 0)&&(choose <= menu_maxno));
 
 		/*执行选择功能*/
-		switch(choose){
-		case 1:  add_user(socketfd)           ;break;
-		case 2:  delect_user(socketfd)        ;break;
-		case 3:  modify_information(socketfd) ;break;
-		case 4:  inquire_information(socketfd);break;
-		case 5:  inquire_history(socketfd)    ;break;
-		default:                               break;
+		switch(choose)
+		{
+		case 1:  add_user(socketfd)               ;break;
+		case 2:  delect_user(socketfd)            ;break;
+//		case 3:  modify_information(socketfd)     ;break;
+//		case 4:  inquire_information(socketfd,msg);break;
+		case 5:  inquire_history(socketfd)        ;break;
+		default:                                   break;
 		}
 
 		/*退出*/
-		if(choose == menu_maxno)break;
+		if(choose == menu_maxno){break;}
 	}
 }

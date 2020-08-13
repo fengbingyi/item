@@ -8,6 +8,7 @@
 ****************************************/
 #ifndef __APPLIB_H__
 #define __APPLIB_H__
+#include"msg.h"
 
 /****************************************
 *Name       : add_usr
@@ -29,9 +30,10 @@ void delect_user(int socketfd);
 *Name       : inquire_information
 *Description: 查询信息
 *args       : socketfd:套接字文件描述符
-*return     : 无
+*             msg_inq:要查询的消息结构体
+*return     : msg消息结构体
 ****************************************/
-void inquire_information(int socketfd);
+msg_t inquire_information(int socketfd, msg_t msg_inq); 
 
 /****************************************
 *Name       : modify_information

@@ -26,12 +26,12 @@
 #define DELECT_USR        10 /*删除用户信息  */
 
 /************权限定义********************/
-#define MANAGER          'M'
-#define USER             'U'
+#define MANAGER          "manager"
+#define USER             "usr"
 
 /************性别定义********************/
-#define MAN              'M'
-#define WONMAN           'W'
+#define MAN              "man"
+#define WONMAN           "wonman"
 //************部门定义*******************/
 #define DEPT1            1
 #define DEPT2            2
@@ -46,15 +46,16 @@
 /********************************/
 #define OK  1
 #define NO  0
+/********************************/
 
 typedef struct mymsg{
 	
-	char usr[10];       //用户名
-	char pri;           //权限
-    char name[10];      //姓名
-	char sex;           //性别（"M"/"W"）
-	char password[10];  //密码
-	char dept[10];      //部门
+	char usr[20];       //用户名
+	char pri[10];           //权限
+    char name[20];      //姓名
+	char sex[10];           //性别（"M"/"W"）
+	char password[20];  //密码
+	char dept[20];      //部门
 	int  cmd;           //命令
 	int  age;           //年龄
 	int  number;        //工号

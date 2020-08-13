@@ -41,17 +41,17 @@ int login_manager(int socketfd)
 	getchar();
 
 	/*将得到信息填充到信息结构体中*/
-	bzero(msg.usr,10);
-	bzero(msg.password,10);
-	strncpy(msg.usr,usr_buf,10);
-	strncpy(msg.password,pw_buf,10);
+	bzero(msg.usr,20);
+	bzero(msg.password,20);
+	strncpy(msg.usr,usr_buf,20);
+	strncpy(msg.password,pw_buf,20);
 
 	/*与服务器通信*/
 	client_send(socketfd,&msg,sizeof(msg));
 	client_receive(socketfd,&rev_msg,sizeof(rev_msg));
 
 	if(OK == rev_msg.status){
-		msg.pri = MANAGER;
+		strcpy(msg.pri, MANAGER);
 		return OK;
 	}
 	return NO;
@@ -85,7 +85,7 @@ int login_user(int socketfd)
 	client_receive(socketfd,&rev_msg,sizeof(rev_msg));
 
 	if(OK == rev_msg.status){
-		msg.pri = USER;
+		strcpy(msg.pri, USER);
 		return OK;
 	}
 	return NO;

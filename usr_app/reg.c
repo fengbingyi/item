@@ -23,8 +23,8 @@ extern msg_t msg;
  ****************************************/
 int reg_manager(int sockfd)
 {
-	char usr_buf[10] = {};	
-	char pw_buf[10]  = {};
+	char usr_buf[20] = {};	
+	char pw_buf[20]  = {};
 	char root[10]    = {};
 	msg_t rev_msg;
 	int ret = -1;
@@ -43,10 +43,10 @@ int reg_manager(int sockfd)
 	scanf("%s",pw_buf);
 	getchar();
 
-	bzero(msg.usr,10);
-	bzero(msg.password,10);
-	strncpy(msg.usr,usr_buf,10);
-	strncpy(msg.password,pw_buf,10);
+	bzero(msg.usr,20);
+	bzero(msg.password,20);
+	strncpy(msg.usr,usr_buf,20);
+	strncpy(msg.password,pw_buf,20);
 
 	client_send(sockfd,&msg,sizeof(msg));
 	client_receive(sockfd,&rev_msg,sizeof(rev_msg));
@@ -67,8 +67,8 @@ int reg_manager(int sockfd)
  ****************************************/
 int reg_usr(int sockfd)
 {
-	char usr_buf[10] = {};
-	char pw_buf[10] = {};
+	char usr_buf[20] = {};
+	char pw_buf[20] = {};
 	msg_t rev_msg;
 	int ret = -1;
 	msg.cmd = REGISTER_USR ;
@@ -78,10 +78,10 @@ int reg_usr(int sockfd)
 	printf("请输入注册的用户密码：");
 	scanf("%s",pw_buf);
 	getchar();
-	bzero(msg.usr,10);
-	bzero(msg.password,10);
-	strncpy(msg.usr,usr_buf,10);
-	strncpy(msg.password,pw_buf,10);
+	bzero(msg.usr,20);
+	bzero(msg.password,20);
+	strncpy(msg.usr,usr_buf,20);
+	strncpy(msg.password,pw_buf,20);
 	client_send(sockfd,&msg,sizeof(msg));
 	client_receive(sockfd,&rev_msg,sizeof(rev_msg));
 	if(OK == rev_msg.status){
@@ -117,7 +117,7 @@ void reg(int socketfd)
 		if(OK == ret)
 			printf("注册用户成功\n");
 		else
-			printf("注册用户失败\n");
+			printf("注册用户失败,请尝试使用其他用户名。\n");
 	}
 
 	/*管理员注册*/
@@ -127,6 +127,6 @@ void reg(int socketfd)
 		if(OK == ret)
 			printf("注册管理员成功\n");
 		else
-			printf("注册管理员失败\n");
+			printf("注册管理员失败，请尝试使用其他用户名\n");
 	}	
 }

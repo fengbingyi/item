@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 		
 		printf("1.name:%s\n",    msg.name    );
 		printf("2.age:%d\n",     msg.age     );
-		printf("3.sex:%c\n",     msg.sex     );
+		printf("3.sex:%s\n",     msg.sex     );
 		printf("4.password:%s\n",msg.password);
 		printf("5.number:%d\n",  msg.number  );
 		printf("6.salary:%d\n",  msg.salary  );

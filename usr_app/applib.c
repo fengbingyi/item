@@ -27,20 +27,31 @@ void add_user(int socketfd)
 	
 	printf("请输入你想添加的用户名>");
 	scanf("%s",msg_add.usr     );
+	getchar();
+	
 	printf("请输入你想添加的姓名>");
 	scanf("%s",msg_add.name    );
+	getchar();
+	
 	printf("请输入你想添加的年龄>");
 	scanf("%d",&msg_add.age    );
+	getchar();
+	
 	printf("请输入你想添加的性别>");
-	scanf("%c",&msg_add.sex    );
+	scanf("%s",msg_add.sex    );
+	getchar();
+	
 	printf("请输入你想添加的密码>");
 	scanf("%s",msg_add.password);
-	printf("请输入你想添加的工号>");
-	scanf("%d",&msg_add.number );
-	printf("请输入你想添加的>");
+	getchar();
+	
+	printf("请输入你想添加的薪水>");
 	scanf("%d",&msg_add.salary );
+	getchar();
+	
 	printf("请输入你想添加的部门>");
 	scanf("%s",msg_add.dept    );
+	getchar();
 	
 	/*ready to add to server*/
 	client_send(socketfd,&msg_add,sizeof(msg_add));
@@ -80,21 +91,23 @@ void delect_user(int socketfd)
 *Name       : inquire_information
 *Description: 查询信息
 *args       : socketfd:套接字文件描述符
-*return     : 无
+*             msg_inq:要查询的消息结构体
+*return     : msg消息结构体
 ****************************************/
-void inquire_information(int socketfd) 
+msg_t inquire_information(int socketfd, msg_t msg_inq) 
 {
 	msg_t rev_msg;
-	msg.cmd = INQUIRE_INFO;
-	client_send(socketfd,&msg,sizeof(msg));
+	msg_inq.cmd = INQUIRE_INFO;
+	client_send(socketfd,&msg_inq,sizeof(msg_inq));
 	client_receive(socketfd,&rev_msg,sizeof(rev_msg));
-	printf("1.姓名：%s\n", msg.name    );
-	printf("2.年龄：%d\n", msg.age     );
-	printf("3.性别：%c\n", msg.sex     );
-	printf("4.密码：%s\n", msg.password);
-	printf("5.工号：%d\n", msg.number  );
-	printf("6.薪水：%d\n", msg.salary  );
-	printf("7.部门：%s\n", msg.dept    );
+	printf("1.姓名：%s\n", rev_msg.name    );
+	printf("2.年龄：%d\n", rev_msg.age     );
+	printf("3.性别：%s\n", rev_msg.sex     );
+	printf("4.密码：%s\n", rev_msg.password);
+	printf("5.工号：%d\n", rev_msg.number  );
+	printf("6.薪水：%d\n", rev_msg.salary  );
+	printf("7.部门：%s\n", rev_msg.dept    );
+	return rev_msg;
 }    
 
 /****************************************
@@ -109,13 +122,16 @@ void modify_information(int socketfd)
 	int menu_maxno = 0 ;   /*max number of menu          */
 	msg_t msg_mod = msg;
 	msg_t rev_msg;
-	inquire_information(socketfd);
-	if(msg.pri == MANAGER){
+	inquire_information(socketfd,msg);
+	/*如果是管理员，需要先得到要修改的用户名*/
+	if(strcmp(msg.pri,MANAGER) == 0){
 		printf("请输入要修改的用户名>");
 		scanf("%s",msg_mod.usr);
 		getchar();
 	}
-	
+
+	/*获得查询用户的资料信息*/
+	msg_mod = inquire_information(socketfd,msg_mod);
 	/*进入修改循环*/
 	while(1){
 		do{
@@ -139,7 +155,7 @@ void modify_information(int socketfd)
 		if(choose == 3)
 		{
 			printf("请输入要修改的性别>");
-			scanf("%c",&msg_mod.sex);      /*暂时没加参数检测*/
+			scanf("%s",msg_mod.sex);      /*暂时没加参数检测*/
 			getchar();
 		}
 
@@ -233,6 +249,5 @@ void renew_password(int socketfd)
 void inquire_history(int socketfd)
 {
 	printf("待开发\n");
-}   
-
+}  
 

@@ -52,7 +52,7 @@ int login_manager(int socketfd)
 
 	if(OK == rev_msg.status){
 		/*将管理员权限写入*/
-		strcpy(msg.pri,MANAGER);
+		strncpy(msg.pri,MANAGER,20);
 		return OK;
 	}
 	return NO;
@@ -86,7 +86,7 @@ int login_user(int socketfd)
 	client_receive(socketfd,&rev_msg,sizeof(rev_msg));
 
 	if(OK == rev_msg.status){
-		strcpy(msg.pri, USER);
+		strncpy(msg.pri, USER,20);
 		return OK;
 	}
 	return NO;
@@ -119,6 +119,7 @@ void login(int socketfd)
 	{
 		ret = login_user(socketfd);
 		if(OK == ret ){
+			strncpy(msg.pri,USER,20);
 			user_function(socketfd);
 		}else{
 			printf("登录失败\n");
@@ -130,6 +131,7 @@ void login(int socketfd)
 	{
 		ret = login_manager(socketfd);
 		if(OK == ret ){
+			strncpy(msg.pri,MANAGER,20);
 			manager_function(socketfd);
 		}else{
 			printf("登录失败\n");

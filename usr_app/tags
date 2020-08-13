@@ -9,6 +9,7 @@ ALL_INFO	msg.h	41;"	d
 BACKLOG	server_test.c	26;"	d	file:
 CC	Makefile	/^CC := gcc$/;"	m
 CFLAGS	Makefile	/^CFLAGS := -c -o$/;"	m
+DATABASE	server.c	20;"	d	file:
 DELECT_USR	msg.h	26;"	d
 DEPT1	msg.h	36;"	d
 DEPT2	msg.h	37;"	d
@@ -17,22 +18,24 @@ DEPT4	msg.h	39;"	d
 FIR_TEN_INFO	msg.h	42;"	d
 INQUIRE_HISTORY	msg.h	24;"	d
 INQUIRE_INFO	msg.h	21;"	d
+IP	server.c	15;"	d	file:
 LOG_MANAGER	msg.h	19;"	d
 LOG_USR	msg.h	20;"	d
 LST_FIFTY_HIS	msg.h	44;"	d
 LST_TEN_INFO	msg.h	43;"	d
 MAN	msg.h	33;"	d
 MANAGER	msg.h	29;"	d
+N	server.c	17;"	d	file:
 NO	msg.h	48;"	d
 OK	msg.h	47;"	d
-QUIT	client.c	24;"	d	file:
+PORT	server.c	16;"	d	file:
 QUIT	server_test.c	24;"	d	file:
 REGISTER_MANAGER	msg.h	17;"	d
 REGISTER_USR	msg.h	18;"	d
 SEL_INFO	msg.h	45;"	d
-SERV_IP_ADDR	client.c	23;"	d	file:
+SERV_IP_ADDR	protocol.h	5;"	d
 SERV_IP_ADDR	server_test.c	23;"	d	file:
-SERV_PORT	client.c	22;"	d	file:
+SERV_PORT	protocol.h	4;"	d
 SERV_PORT	server_test.c	22;"	d	file:
 TARGET	Makefile	/^TARGET ?= app$/;"	m
 USER	msg.h	30;"	d
@@ -45,13 +48,12 @@ __LOGIN_H__	login.h	10;"	d
 __MANAGER_FUNCTION_H__	manager_function.h	10;"	d
 __MENU_H__	menu.h	10;"	d
 __MSG_H__	msg.h	10;"	d
+__PROTOCOL_H__	protocol.h	2;"	d
 __REG_H__	reg.h	10;"	d
 __USR_FUNCTION_H__	usr_function.h	10;"	d
-abc	add.c	/^int abc;$/;"	v
-abcd	add.c	/^int abcd;$/;"	v
-adc	add.c	/^int adc;$/;"	v
 add_user	applib.c	/^void add_user(int socketfd)$/;"	f
 age	msg.h	/^	int  age;           \/\/年龄$/;"	m	struct:mymsg
+callback	server.c	/^int callback(void* arg,int f_num,char** f_value,char** f_name)$/;"	f
 client_exit	client.c	/^void client_exit(int fd)$/;"	f
 client_init	client.c	/^int client_init()$/;"	f
 client_receive	client.c	/^int client_receive(int sockfd, void *buf, size_t len)$/;"	f
@@ -59,13 +61,25 @@ client_send	client.c	/^int client_send(int sockfd, const void *buf, size_t len)$
 cmd	msg.h	/^	int  cmd;           \/\/命令$/;"	m	struct:mymsg
 delect_user	applib.c	/^void delect_user(int socketfd)$/;"	f
 dept	msg.h	/^	char dept[20];      \/\/部门$/;"	m	struct:mymsg
+do_add_userinfo	server.c	/^void do_add_userinfo(int acceptfd, msg_t *msg, sqlite3 *db)     $/;"	f
+do_admin_login	server.c	/^int do_admin_login(int acceptfd, msg_t *msg , sqlite3 *db)$/;"	f
+do_admin_query	server.c	/^int do_admin_query(int acceptfd, msg_t *msg, sqlite3 *db)     \/\/管理员查询$/;"	f
+do_client	server.c	/^int do_client(int acceptfd, sqlite3 *db)$/;"	f
+do_delete_user	server.c	/^void do_delete_user(int acceptfd, msg_t *msg, sqlite3 *db)      {$/;"	f
+do_inquir_info	server.c	/^int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 \/\/用户查询$/;"	f
+do_manager_register	server.c	/^void do_manager_register(int acceptfd, msg_t *msg, sqlite3 *db)$/;"	f
+do_update_info	server.c	/^void do_update_info(int acceptfd, msg_t *msg, sqlite3 *db)$/;"	f
+do_user_login	server.c	/^int do_user_login(int acceptfd, msg_t *msg , sqlite3 *db)$/;"	f
+do_usr_register	server.c	/^void do_usr_register(int acceptfd, msg_t *msg, sqlite3 *db)$/;"	f
+get_date	server.c	/^int get_date(char *date)$/;"	f
 inq_cnt	msg.h	/^	int  inq_cnt;       \/\/查询个数$/;"	m	struct:mymsg
 inq_mode	msg.h	/^	int  inq_mode;      \/\/查询模式$/;"	m	struct:mymsg
 inquire_history	applib.c	/^void inquire_history(int socketfd)$/;"	f
-inquire_information	applib.c	/^msg_t inquire_information(int socketfd, msg_t msg_inq) $/;"	f
+inquire_information	applib.c	/^void inquire_information(int socketfd) $/;"	f
 login	login.c	/^void login(int socketfd)$/;"	f
 login_manager	login.c	/^int login_manager(int socketfd)$/;"	f
 login_user	login.c	/^int login_user(int socketfd)$/;"	f
+main	server.c	/^int main(int argc, const char *argv[])$/;"	f
 main	server_test.c	/^int main(int argc, char *argv[])$/;"	f
 main	usr_app.c	/^int main(int argc, const char *argv[])$/;"	f
 manager_function	manager_function.c	/^void manager_function(int socketfd)$/;"	f
@@ -89,6 +103,7 @@ reg	reg.c	/^void reg(int socketfd)$/;"	f
 reg_manager	reg.c	/^int reg_manager(int sockfd)$/;"	f
 reg_usr	reg.c	/^int reg_usr(int sockfd)$/;"	f
 renew_password	applib.c	/^void renew_password(int socketfd)$/;"	f
+renew_password	server.c	/^void renew_password(int acceptfd, msg_t *msg, sqlite3 *db)      \/\/修改密码信息$/;"	f
 salary	msg.h	/^	int  salary;        \/\/薪水$/;"	m	struct:mymsg
 sex	msg.h	/^	char sex[10];           \/\/性别（"M"\/"W"）$/;"	m	struct:mymsg
 status	msg.h	/^	int  status;        \/\/返回$/;"	m	struct:mymsg

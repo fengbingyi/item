@@ -100,6 +100,7 @@ void inquire_information(int socketfd)
 	client_send(socketfd,&msg,sizeof(msg));
 	if(strcmp(msg.pri,USER) == 0){
 		client_receive(socketfd,&rev_msg,sizeof(rev_msg));
+		msg = rev_msg;
 		printf("1.姓名：%s\n", msg.name    );
 		printf("2.年龄：%d\n", msg.age     );
 		printf("3.性别：%s\n", msg.sex     );

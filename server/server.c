@@ -12,7 +12,7 @@
 #include "msg.h"
 
 
-#define IP "192.168.5.111"
+#define IP "192.168.1.111"
 #define PORT "6666"
 #define   N  32
 
@@ -771,6 +771,7 @@ int callback(void* arg,int f_num,char** f_value,char** f_name)
 int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 {
 
+	printf("1\n");
 	char sql[128] = {};
 	char *errmsg;
 	char ** result;
@@ -806,14 +807,16 @@ int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 	if(sqlite3_get_table(db, sql, &result, &nrow, &ncloumn, &errmsg)!= SQLITE_OK)
 	{
 		printf("%s\n", errmsg);
-		sendmsg.status=NO;
+		sendmsg.status = NO;
+		sendmsg.inq_cnt=0;
 		printf("查询失败");
 		send(acceptfd, &sendmsg, sizeof(msg_t), 0);
 		printf("查询成功msg发送成功！\n");
 	}
 	if(nrow < 1)
 	{
-		sendmsg.status=NO;
+		sendmsg.status = NO;
+		sendmsg.inq_cnt=0;
 		printf("没有记录\n");
 		send(acceptfd, &sendmsg, sizeof(msg_t), 0);
 		printf("查询成功msg发送成功！\n");
@@ -828,35 +831,40 @@ int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 			puts("");
 
 		//打印数据 并一条一条发送
-		while(nrow)
+		int n=1,num;
+		int max_nrow = nrow;
+		while(nrow+1)
 		{
 			puts("");
-		
-			for(i=ncloumn;i<(2*ncloumn);i++)
+			
+			for(i=0;i<(ncloumn);i++)
 			{
-				printf("%-10s",result[i]);
+				printf("%-10s",result[n*ncloumn+i]);
 			}
+		
 			puts("");
 			i=0;
-			sendmsg.number = atoi(result[ncloumn+(i++)]);
-			strcpy(sendmsg.usr,result[ncloumn+(i++)]);
-			strcpy(sendmsg.password,result[ncloumn+(i++)]);
-			strcpy(sendmsg.pri,result[ncloumn+(i++)]);
-			strcpy(sendmsg.name,result[ncloumn+(i++)]);
-			sendmsg.age = atoi(result[ncloumn+(i++)]);
-			strcpy(sendmsg.sex,result[ncloumn+(i++)]);
-			sendmsg.salary = atoi(result[ncloumn+(i++)]);
-			strcpy(sendmsg.dept,result[ncloumn+(i++)]);
-			
-			sendmsg.inq_cnt = nrow--; 
-			
+			num = 9*(max_nrow-nrow);
+			sendmsg.number = atoi(result[n]);
+			strcpy(sendmsg.usr,result[num +(i++)]);
+			strcpy(sendmsg.password,result[num+(i++)]);
+			strcpy(sendmsg.pri,result[num+(i++)]);
+			strcpy(sendmsg.name,result[num+(i++)]);
+			sendmsg.age = atoi(result[num+(i++)]);
+			strcpy(sendmsg.sex,result[num+(i++)]);
+			sendmsg.salary = atoi(result[num+(i++)]);
+			strcpy(sendmsg.dept,result[num+(i++)]);
+			sendmsg.inq_cnt = (--nrow); 
+			printf("inq_cnt：%d\n",sendmsg.inq_cnt);
+			printf("nrow：%d\n",nrow);
+		
 
 			// 所有的记录查询发送完毕之后，给客户端发出一个结束信息
 			sendmsg.status  =  OK;
 			send(acceptfd, &sendmsg, sizeof(msg_t), 0);
 			printf("查询成功msg发送成功！\n");
 
-
+			n++;
 
 		}
 

@@ -31,7 +31,7 @@ int login_manager(int socketfd)
 	/*fill login manager command */
 	msg.cmd = LOG_MANAGER ;
 	/*输入管理员名字 */
-	printf("请输入管理员名字：");
+	printf("请输入管理员账号：");
 	scanf("%s",usr_buf);
 	getchar();
 
@@ -72,7 +72,7 @@ int login_user(int socketfd)
 	msg_t rev_msg;         /*从服务器收到的信息*/
 	int ret = -1;	
 	msg.cmd = LOG_USR ;
-	printf("请输入用户名字：");
+	printf("请输入用户账号：");
 	scanf("%s",usr_buf);
 	getchar();
 	printf("请输入用户密码：");

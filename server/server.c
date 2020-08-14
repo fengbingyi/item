@@ -12,7 +12,7 @@
 #include "msg.h"
 
 
-#define IP "192.168.1.111"
+#define IP "192.168.5.111"
 #define PORT "6666"
 #define   N  32
 
@@ -227,8 +227,12 @@ int do_client(int acceptfd, sqlite3 *db)
 			printf("删除用户或者管理员信息\n");
 			do_delete_user(acceptfd,&msg,db);	
 			break;
+		case 7:
+			printf("修改信息\n");
+			do_update_info(acceptfd,&msg,db);
+			break;
 		default:
-			printf("操作指令非法.\n");
+			printf("操作指令非法.\n");break;
 		}
 
 	}
@@ -370,7 +374,7 @@ void do_add_userinfo(int acceptfd, msg_t *msg, sqlite3 *db)
 	//不存在则添加此用户信息
 	if(nrow==0)
 	{
-		sprintf(sql,"insert into info (usr,password,name,age,sex,salary, dept) values('%s','%s','%s',%d,'%s',%d,'%s');",msg->usr,msg->password,msg->name,msg->age,msg->sex,msg->salary,msg->dept);
+		sprintf(sql,"insert into info (usr,password,pri,name,age,sex,salary, dept) values('%s','%s','user','%s',%d,'%s',%d,'%s');",msg->usr,msg->password,msg->name,msg->age,msg->sex,msg->salary,msg->dept);
 		printf("%s\n", sql);
 
 		//插入数据到数据库
@@ -442,7 +446,7 @@ void do_update_info(int acceptfd, msg_t *msg, sqlite3 *db)
 
 		if(nrow > 0)
 		{	
-			sprintf(sql,"update info set pri='user',name='%s',age=%d,sex='%s',salary=%d,dept='%s' ;",msg->name,msg->age,msg->sex,msg->salary,msg->dept);
+			sprintf(sql,"update info set pri='user',name='%s',age=%d,sex='%s',salary=%d,dept='%s' where usr = '%s' ;",msg->name,msg->age,msg->sex,msg->salary,msg->dept,msg->usr);
 			printf("%s\n", sql);
 
 			//插入数据到数据库
@@ -452,13 +456,14 @@ void do_update_info(int acceptfd, msg_t *msg, sqlite3 *db)
 				msg->status = NO;
 			}
 			else
-			{
-				printf("修改信息成功");
-
+			{	
 				msg->status = OK;
+				printf("修改信息成功");
+				printf("status = %d\n",msg->status);
+				
 			}
 
-			if(send(acceptfd, msg, sizeof(msg_t), 0) < 0)
+			if(send(acceptfd, msg, sizeof(msg), 0) < 0)
 			{
 				perror("msg发送失败\n");
 				return ;
@@ -468,6 +473,14 @@ void do_update_info(int acceptfd, msg_t *msg, sqlite3 *db)
 			//无此用户 就不用执行Update
 
 			msg->status = NO;
+			printf("status = NO\n");
+			if(send(acceptfd, msg, sizeof(msg_t), 0) < 0)
+			{
+				perror("msg发送失败\n");
+				return ;
+			}
+
+
 
 		}
 		printf("msg发送成功!\n");
@@ -758,6 +771,7 @@ int callback(void* arg,int f_num,char** f_value,char** f_name)
 	return 0;
 }
 
+
 /********************************************************************************
  *函数名： do_inquir_info
  *
@@ -770,31 +784,23 @@ int callback(void* arg,int f_num,char** f_value,char** f_name)
  * *****************************************************************************/
 int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 {
-
-	printf("1\n");
 	char sql[128] = {};
 	char *errmsg;
 	char ** result;
 	int nrow,ncloumn;
 	msg_t sendmsg;
+	/*判断权限*/
+	printf("您的权限为：%s\n",msg->pri);
 	if(!strcmp(msg->pri,USER))
 	{
 
 		printf("你是普通用户\n");
 		sprintf(sql, "select * from info where usr = '%s';", msg->usr);
 		printf("%s\n",sql);
-	}else if(!strcmp(msg->pri, MANAGER))
-	{
+	}else{
 		printf("你是管理员\n");
 		sprintf(sql, "select * from info;", msg->usr);
 		printf("%s\n",sql);
-	
-	}
-	else{
-		sendmsg.status=NO;
-		printf("没有发送查询权限，拒绝查询\n");
-		send(acceptfd, &sendmsg, sizeof(msg_t), 0);
-		printf("查询成功msg发送成功！\n");
 
 	}
 	//db句柄
@@ -804,6 +810,7 @@ int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 	//pnColumn：满足条件的列数
 	//pzErrmsg：错误信息地址
 	//查询数据库
+	
 	if(sqlite3_get_table(db, sql, &result, &nrow, &ncloumn, &errmsg)!= SQLITE_OK)
 	{
 		printf("%s\n", errmsg);
@@ -821,54 +828,46 @@ int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 		send(acceptfd, &sendmsg, sizeof(msg_t), 0);
 		printf("查询成功msg发送成功！\n");
 	}else{	
-
-		//打印表头
-			int i=0;
-			for(i=0;i<(ncloumn);i++)
-			{
-				printf("%-10s",result[i]);
-			}
-			puts("");
-
-		//打印数据 并一条一条发送
-		int n=1,num;
-		int max_nrow = nrow;
-		while(nrow+1)
-		{
-			puts("");
+		int i=1,j;  /*i记录行数,j记录每行的起始地址*/
+		/*扫描第i行*/
+		for(i = 1; i <= nrow ; i++){
+			j = 9*i;
+			/*传输数据前赋值*/
+			sendmsg.number = atoi(result[j]);
+			strcpy(sendmsg.usr,result[j+1]);
+			strcpy(sendmsg.password,result[j+2]);
+			strcpy(sendmsg.pri,result[j+3]);
+			strcpy(sendmsg.name,result[j+4]);
+			sendmsg.age = atoi(result[j+5]);
+			strcpy(sendmsg.sex,result[j+6]);
+			sendmsg.salary = atoi(result[j+7]);
+			strcpy(sendmsg.dept,result[j+8]);
 			
-			for(i=0;i<(ncloumn);i++)
-			{
-				printf("%-10s",result[n*ncloumn+i]);
+			sendmsg.inq_cnt = 2; 
+
+			if( i == nrow ){
+				sendmsg.inq_cnt = 0;
+				printf("查询到了最后一行，查询结束\n");
 			}
-		
-			puts("");
-			i=0;
-			num = 9*(max_nrow-nrow);
-			sendmsg.number = atoi(result[n]);
-			strcpy(sendmsg.usr,result[num +(i++)]);
-			strcpy(sendmsg.password,result[num+(i++)]);
-			strcpy(sendmsg.pri,result[num+(i++)]);
-			strcpy(sendmsg.name,result[num+(i++)]);
-			sendmsg.age = atoi(result[num+(i++)]);
-			strcpy(sendmsg.sex,result[num+(i++)]);
-			sendmsg.salary = atoi(result[num+(i++)]);
-			strcpy(sendmsg.dept,result[num+(i++)]);
-			sendmsg.inq_cnt = (--nrow); 
-			printf("inq_cnt：%d\n",sendmsg.inq_cnt);
-			printf("nrow：%d\n",nrow);
-		
 
 			// 所有的记录查询发送完毕之后，给客户端发出一个结束信息
+			printf("总行数:%d\n",nrow);
+			printf("开始发送消息到客户端\n");
+			printf("姓名:%s\t年龄:%d\t性别:%s\t工号:%d\t薪水:%d\t部门:%s\n",
+					sendmsg.name,
+					sendmsg.age,
+					sendmsg.sex,
+					sendmsg.number,
+					sendmsg.salary,
+					sendmsg.dept);
+
 			sendmsg.status  =  OK;
+			
 			send(acceptfd, &sendmsg, sizeof(msg_t), 0);
 			printf("查询成功msg发送成功！\n");
-
-			n++;
-
+			printf("行数:%d\n",i);//打印第i行
 		}
-
-		}
+	}
 	return 0;
 }
 

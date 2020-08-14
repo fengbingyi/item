@@ -26,12 +26,12 @@
 #define DELECT_USR        10 /*删除用户信息  */
 
 /************权限定义********************/
-#define MANAGER          "manager"
+#define MANAGER          "admin"
 #define USER             "usr"
 
 /************性别定义********************/
 #define MAN              "man"
-#define WONMAN           "wonman"
+#define WONMAN           "woman"
 //************部门定义*******************/
 #define DEPT1            1
 #define DEPT2            2

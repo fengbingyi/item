@@ -51,7 +51,8 @@ int login_manager(int socketfd)
 	client_receive(socketfd,&rev_msg,sizeof(rev_msg));
 
 	if(OK == rev_msg.status){
-		strcpy(msg.pri, MANAGER);
+		/*将管理员权限写入*/
+		strcpy(msg.pri,MANAGER);
 		return OK;
 	}
 	return NO;

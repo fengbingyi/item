@@ -18,10 +18,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-
-#define  SERV_PORT    "6666"
-#define  SERV_IP_ADDR "192.168.5.104"
-#define  QUIT         "quit"
+#include "protocol.h"
 
 /****************************************
  *Name       : client_init

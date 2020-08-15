@@ -161,7 +161,7 @@ void modify_information(int socketfd)
 
 		if(choose == 4)
 		{
-			if(msg.pri == MANAGER){
+			if(strcmp(msg.pri,MANAGER) == 0){
 			printf("请输入要修改的密码>");
 			scanf("%s",msg.password); /*暂时没添加参数检测*/
 			getchar();
@@ -172,10 +172,10 @@ void modify_information(int socketfd)
 
 		if(choose == 5)
 		{
-			if(msg.pri == MANAGER){
-			printf("请输入要修改的工号>");
-			scanf("%d",&msg.number);
-			getchar();
+			if(strcmp(msg.pri,MANAGER) == 0){
+				printf("请输入要修改的工号>");
+				scanf("%d",&msg.number);
+				getchar();
 			}else{
 				printf("本项修改权限不足\n");
 			}
@@ -183,19 +183,18 @@ void modify_information(int socketfd)
 
 		if(choose == 6)
 		{
-			if(msg.pri == MANAGER){
+			if(strcmp(msg.pri,MANAGER) == 0){
 			printf("请输入要修改的薪水>");
 			scanf("%d",&msg.salary);
 			getchar();
 			}else{
 				printf("本项修改权限不足\n");
-				break;
 			}
 		}
 
 		if(choose == 7)
 		{
-			if(msg.pri == MANAGER){
+			if(strcmp(msg.pri,MANAGER) == 0){
 				printf("请输入要修改的部门>");
 				scanf("%s",msg.dept);
 				getchar();

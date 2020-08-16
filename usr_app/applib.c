@@ -112,6 +112,7 @@ void inquire_information(int socketfd)
 		msg.inq_cnt = 1;/*标记开始接收信息*/
 		while(msg.inq_cnt >= 1){
 			client_receive(socketfd,&rev_msg,sizeof(rev_msg));
+			msg = rev_msg;
 			printf("姓名:%s\t年龄:%d\t性别:%s\t工号:%d\t薪水:%d\t部门:%s\n",
 					msg.name,
 					msg.age,

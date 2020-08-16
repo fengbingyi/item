@@ -72,8 +72,7 @@ int menu_user_function()
 	printf("1.查询信息\n");
 	printf("2.修改密码\n");
 	printf("3.修改信息\n");
-	printf("4.查询登录历史\n");
-	printf("5.退出\n");
+	printf("4.退出\n");
 	printf("******************************\n");
 	return 4;
 }
@@ -92,10 +91,9 @@ int menu_manager_function()
 	printf("2.删除用户\n");
 	printf("3.修改信息\n");
 	printf("4.查询信息\n");
-	printf("5.查询登录历史\n");
-	printf("6.退出\n");
+	printf("5.退出\n");
 	printf("******************************\n");
-	return 6;
+	return 5;
 }
 
 
@@ -112,9 +110,9 @@ int  menu_modify()
 	printf("******************************\n");
 	printf("M 需要管理员权限\n");
 	printf("1.姓名 2.年龄 3.性别 4.密码(M) \n");
-	printf("5.工号(M) 6.薪水(M) 7.部门(M) 0.完成修改\n");
+	printf("5.薪水(M) 6.部门(M) 0.完成修改\n");
 	printf("******************************\n");
-	return 8;
+	return 7;
 }
 
 

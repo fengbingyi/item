@@ -50,12 +50,4 @@ void modify_information(int socketfd);
 ****************************************/
 void renew_password(int socketfd);
 
-/****************************************
-*Name       : inquire_history
-*Description: 查询登录历史信息
-*args       : @socketfd
-*return     : 无
-****************************************/
-void inquire_history(int socketfd);
-
 #endif

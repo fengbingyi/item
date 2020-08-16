@@ -39,11 +39,9 @@ void manager_function(int socketfd)
 		case 1:  add_user(socketfd)                ;break;
 		case 2:  delect_user(socketfd)             ;break;
 		case 3:  modify_information(socketfd)      ;break;
-		case 4:  inquire_information(socketfd) ;break;
-		case 5:  inquire_history(socketfd)         ;break;
+		case 4:  inquire_information(socketfd)     ;break;
 		default:                                    break;
 		}
-
 		/*退出*/
 		if(choose == menu_maxno){break;}
 	}

@@ -299,15 +299,3 @@ void renew_password(int socketfd)
 		printf("密码修改失败\n");
 	}
 }  
-
-/****************************************
- *Name       : inquire_history
- *Description: 查询登录历史信息
- *args       : @socketfd
- *return     : 无
- ****************************************/
-void inquire_history(int socketfd)
-{
-	printf("待开发\n");
-}  
-

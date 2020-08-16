@@ -100,7 +100,7 @@ void inquire_information(int socketfd)
 	client_send(socketfd,&msg,sizeof(msg));
 	if(strcmp(msg.pri,USER) == 0){
 		client_receive(socketfd,&rev_msg,sizeof(rev_msg));
-        msg = rev_msg;
+		msg = rev_msg;
 		printf("1.姓名：%s\n", msg.name    );
 		printf("2.年龄：%d\n", msg.age     );
 		printf("3.性别：%s\n", msg.sex     );
@@ -110,16 +110,16 @@ void inquire_information(int socketfd)
 		printf("7.部门：%s\n", msg.dept    );
 	}else{
 		msg.inq_cnt = 1;/*标记开始接收信息*/
-		while(msg.inq_cnt >= 1){
+		while(rev_msg.inq_cnt >= 1){
 			client_receive(socketfd,&rev_msg,sizeof(rev_msg));
-			msg = rev_msg;
-			printf("姓名:%s\t年龄:%d\t性别:%s\t工号:%d\t薪水:%d\t部门:%s\n",
-					msg.name,
-					msg.age,
-					msg.sex,
-					msg.number,
-					msg.salary,
-					msg.dept);
+			printf("用户名:%s\t姓名:%s\t年龄:%d\t性别:%s\t工号:%d\t薪水:%d\t部门:%s\n",
+					rev_msg.usr,
+					rev_msg.name,
+					rev_msg.age,
+					rev_msg.sex,
+					rev_msg.number,
+					rev_msg.salary,
+					rev_msg.dept);
 		}
 	}
 }      
@@ -134,20 +134,18 @@ void modify_information(int socketfd)
 {
 	int choose     = 0 ;   /*用户选择值                  */
 	int menu_maxno = 0 ;   /*菜单项数目                  */
-	char usr_buf[20] = {}; /*管理员名字缓存*/
 	char sex_buf[20] = {}; /*性别缓存*/
 	int ret = 0 ;
 	int manager_flag = 0;  /*本次操作为管理员时需要标记为1，
 							 不是则为0*/
-	msg_t msg_mod = msg;
+	msg_t msg_manager = msg;
 	msg_t rev_msg;
 	inquire_information(socketfd);
 	/*如果是管理员，需要先得到要修改的用户名*/
 	if(strcmp(msg.pri,MANAGER) == 0){
 		/*需要将当前管理员权限信息备份*/
 		manager_flag = 1;   /*标记此次操作为管理员*/
-		strncpy(msg.pri,USER,20);
-		strncpy(usr_buf,msg.usr,20);
+		strncpy(msg.pri,USER,20);;
 		/*获取要修改的用户名*/
 		printf("请输入要修改的用户名\n>");
 		scanf("%s",msg.usr);
@@ -159,11 +157,13 @@ void modify_information(int socketfd)
 	/*进入修改循环*/
 	while(1){
 		do{
-			menu_modify();			
+			menu_maxno = menu_modify();			
 			menu_choose();
 			scanf("%d",&choose);
 			getchar();
-		}while(!(choose>=0 && choose < 8));
+			printf("\ninput%d\n",choose);
+		}while(!(choose>=0 && choose <=menu_maxno));
+
 		if(choose == 1)
 		{
 			printf("请输入要修改的姓名\n>");
@@ -172,6 +172,7 @@ void modify_information(int socketfd)
 				getchar();
 			}while(ret <= 0);
 		}
+
 		if(choose == 2)
 		{
 			printf("请输入要修改的年龄\n>");
@@ -180,6 +181,7 @@ void modify_information(int socketfd)
 				getchar();
 			}while(ret <= 0);
 		}
+
 		if(choose == 3)
 		{
 			printf("请输入要修改的性别\n>");	
@@ -198,7 +200,7 @@ void modify_information(int socketfd)
 
 		if(choose == 4)
 		{
-			if(strcmp(msg.pri,MANAGER) == 0){
+			if(manager_flag == 1){
 				printf("请输入要修改的密码\n>");
 				do{
 					ret = scanf("%s",msg.password); /*暂时没添加参数检测*/
@@ -209,22 +211,10 @@ void modify_information(int socketfd)
 			}
 		}
 
+
 		if(choose == 5)
 		{
-			if(strcmp(msg.pri,MANAGER) == 0){
-				printf("请输入要修改的工号\n>");
-				do{
-					ret = scanf("%d",&msg.number);
-					getchar();
-				}while(ret <= 0);
-			}else{
-				printf("本项修改权限不足\n");
-			}
-		}
-
-		if(choose == 6)
-		{
-			if(strcmp(msg.pri,MANAGER) == 0){
+			if(manager_flag == 1){
 				printf("请输入要修改的薪水\n>");
 				do{
 					ret = scanf("%d",&msg.salary);
@@ -235,9 +225,9 @@ void modify_information(int socketfd)
 			}
 		}
 
-		if(choose == 7)
+		if(choose == 6)
 		{
-			if(strcmp(msg.pri,MANAGER) == 0){
+			if(manager_flag == 1){
 				printf("请输入要修改的部门\n>");
 				do{
 					ret = scanf("%s",msg.dept);
@@ -248,10 +238,12 @@ void modify_information(int socketfd)
 			}
 		}
 
-		if(choose == 0)break;
+		if(choose == 7)break;
+
 	}
 	/*修改信息完成，开始发送到服务器，修改数据库*/
-	client_send(socketfd,&msg_mod,sizeof(msg_mod));
+	msg.cmd = VERIFY_INFO;
+	client_send(socketfd,&msg,sizeof(msg));
 	client_receive(socketfd,&rev_msg,sizeof(rev_msg));
 	if(OK == rev_msg.status){
 		printf("数据库中修改成功\n");
@@ -261,9 +253,10 @@ void modify_information(int socketfd)
 	/*将管理员的名字恢复*/
 	if(manager_flag == 1){
 		/*把管理员权限拷贝回来*/
-		strncpy(msg.pri,MANAGER,20);
-		/*把管理员用户名拷贝回来*/
-		strncpy(msg.usr,usr_buf,20);
+		msg = msg_manager;
+		msg.cmd = VERIFY_INFO;
+		client_send(socketfd,&msg,sizeof(msg));
+		client_receive(socketfd,&rev_msg,sizeof(rev_msg));
 	}
 } 
 

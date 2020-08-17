@@ -27,11 +27,11 @@
 
 /************权限定义********************/
 #define MANAGER          "admin"
-#define USER             "usr"
+#define USER             "user"
 
 /************性别定义********************/
 #define MAN              "man"
-#define WONMAN           "wonman"
+#define WONMAN           "woman"
 //************部门定义*******************/
 #define DEPT1            1
 #define DEPT2            2
@@ -39,6 +39,10 @@
 #define DEPT4            4
 /*********查询方式定义（inq_mode）*******/
 #define ALL_INFO      1  //查询所有信息
+#define FIR_TEN_INFO  2  //查询前10条
+#define LST_TEN_INFO  3  //查询后10条
+#define LST_FIFTY_HIS 4  //查询后50条
+#define SEL_INFO      5  //查询选定条数的信息
 /********************************/
 #define OK  1
 #define NO  0

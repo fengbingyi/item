@@ -31,7 +31,7 @@
 
 /************性别定义********************/
 #define MAN              "man"
-#define WONMAN           "wonman"
+#define WONMAN           "woman"
 //************部门定义*******************/
 #define DEPT1            1
 #define DEPT2            2

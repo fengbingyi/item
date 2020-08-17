@@ -5,4 +5,5 @@ all:
 
 clean:
 	rm  *.db server
-		
+
+

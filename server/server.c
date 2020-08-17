@@ -12,7 +12,7 @@
 #include "msg.h"
 
 
-#define IP "192.168.1.111"
+#define IP "192.168.5.111"
 #define PORT "6666"
 #define   N  32
 
@@ -227,12 +227,12 @@ int do_client(int acceptfd, sqlite3 *db)
 			printf("删除用户或者管理员信息\n");
 			do_delete_user(acceptfd,&msg,db);	
 			break;
-		case VERIFY_INFO:
-			printf("修改用户信息\n");
-			do_update_info(acceptfd,&msg,db);      //修改信息
+		case 7:
+			printf("修改信息\n");
+			do_update_info(acceptfd,&msg,db);
 			break;
 		default:
-			printf("操作指令非法.\n");
+			printf("操作指令非法.\n");break;
 		}
 
 	}
@@ -374,7 +374,7 @@ void do_add_userinfo(int acceptfd, msg_t *msg, sqlite3 *db)
 	//不存在则添加此用户信息
 	if(nrow==0)
 	{
-		sprintf(sql,"insert into info (usr,password,name,age,sex,salary, dept) values('%s','%s','%s',%d,'%s',%d,'%s');",msg->usr,msg->password,msg->name,msg->age,msg->sex,msg->salary,msg->dept);
+		sprintf(sql,"insert into info (usr,password,pri,name,age,sex,salary, dept) values('%s','%s','user','%s',%d,'%s',%d,'%s');",msg->usr,msg->password,msg->name,msg->age,msg->sex,msg->salary,msg->dept);
 		printf("%s\n", sql);
 
 		//插入数据到数据库
@@ -446,7 +446,7 @@ void do_update_info(int acceptfd, msg_t *msg, sqlite3 *db)
 
 		if(nrow > 0)
 		{	
-			sprintf(sql,"update info set pri='user',name='%s',age=%d,sex='%s',salary=%d,dept='%s' ;",msg->name,msg->age,msg->sex,msg->salary,msg->dept);
+			sprintf(sql,"update info set pri='user',name='%s',age=%d,sex='%s',salary=%d,dept='%s' where usr = '%s' ;",msg->name,msg->age,msg->sex,msg->salary,msg->dept,msg->usr);
 			printf("%s\n", sql);
 
 			//插入数据到数据库
@@ -456,13 +456,14 @@ void do_update_info(int acceptfd, msg_t *msg, sqlite3 *db)
 				msg->status = NO;
 			}
 			else
-			{
-				printf("修改信息成功");
-
+			{	
 				msg->status = OK;
+				printf("修改信息成功");
+				printf("status = %d\n",msg->status);
+				
 			}
 
-			if(send(acceptfd, msg, sizeof(msg_t), 0) < 0)
+			if(send(acceptfd, msg, sizeof(msg), 0) < 0)
 			{
 				perror("msg发送失败\n");
 				return ;
@@ -472,6 +473,14 @@ void do_update_info(int acceptfd, msg_t *msg, sqlite3 *db)
 			//无此用户 就不用执行Update
 
 			msg->status = NO;
+			printf("status = NO\n");
+			if(send(acceptfd, msg, sizeof(msg_t), 0) < 0)
+			{
+				perror("msg发送失败\n");
+				return ;
+			}
+
+
 
 		}
 		printf("msg发送成功!\n");
@@ -762,6 +771,7 @@ int callback(void* arg,int f_num,char** f_value,char** f_name)
 	return 0;
 }
 
+
 /********************************************************************************
  *函数名： do_inquir_info
  *
@@ -779,24 +789,18 @@ int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 	char ** result;
 	int nrow,ncloumn;
 	msg_t sendmsg;
+	/*判断权限*/
+	printf("您的权限为：%s\n",msg->pri);
 	if(!strcmp(msg->pri,USER))
 	{
 
 		printf("你是普通用户\n");
 		sprintf(sql, "select * from info where usr = '%s';", msg->usr);
 		printf("%s\n",sql);
-	}else if(!strcmp(msg->pri, MANAGER))
-	{
+	}else{
 		printf("你是管理员\n");
 		sprintf(sql, "select * from info;", msg->usr);
 		printf("%s\n",sql);
-
-	}
-	else{
-		sendmsg.status=NO;
-		printf("没有发送查询权限，拒绝查询\n");
-		send(acceptfd, &sendmsg, sizeof(msg_t), 0);
-		printf("查询成功msg发送成功！\n");
 
 	}
 	//db句柄
@@ -866,6 +870,8 @@ int do_inquir_info(int acceptfd, msg_t *msg, sqlite3 *db) 	 //用户查询
 	}
 	return 0;
 }
+
+
 
 int do_admin_query(int acceptfd, msg_t *msg, sqlite3 *db)     //管理员查询
 {
